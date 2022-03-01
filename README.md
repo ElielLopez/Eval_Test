@@ -13,3 +13,11 @@ for example:
 ![cmd_exm](https://user-images.githubusercontent.com/58383829/156204152-45e1bdec-ab36-4cce-b52f-0510dcd4fb24.jpg)
 <br/>
 
+_________________
+## Check Point Research Feed
+
+This program will receive all the recent publication and print the fate and time <br/>
+in additon, IOC will be extracted into a CSV file
+Date, Title, IOC_Type| IOC
+
+_________________
