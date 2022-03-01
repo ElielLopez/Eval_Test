@@ -17,7 +17,7 @@ _________________
 ## Check Point Research Feed
 
 This program will receive all the recent publication and print the fate and time <br/>
-in additon, IOC will be extracted into a CSV file
-Date, Title, IOC_Type| IOC
+in additon, IOC will be extracted into a CSV file <br/>
+Date | Title | IOC_Type | IOC <br/>
 
 _________________
