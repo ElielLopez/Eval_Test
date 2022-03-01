@@ -13,7 +13,7 @@ for example:
 ![cmd_exm](https://user-images.githubusercontent.com/58383829/156204152-45e1bdec-ab36-4cce-b52f-0510dcd4fb24.jpg)
 <br/>
 
-notice that you must write * **_-k_** * and * **_-i_** *
+notice that you must write **_-k_** and **_-i_**
 _________________
 ## Check Point Research Feed
 
