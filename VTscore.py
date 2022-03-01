@@ -16,7 +16,6 @@ def check_key(api_key):
 def check_file(file_name):
     try:
         f = open(file_name)
-        print("Searching for file\n")
         f.close()
         return True
     except IOError:
@@ -48,8 +47,7 @@ def analyze_sha1(key, hash):
         for scan in scans:
             values = scans[scan]
             if (scan == 'Microsoft' or scan == "ZoneAlarm by Check Point") and values['detected'] == True:
-                print("Microsoft or Check Point engine detected\n")
-                print("Malicious\n")
+                print("Check Point or Microsoft engine detected this file as Malicious\n")
                 exit()
         # if non of the engines above has detected it as malicious, this condition will check if the engine count
         # is at least 50
@@ -69,7 +67,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if check_key(args.api_key) and check_file(args.input):
-        print("Proccessing\n")
+        print("Processing\n")
         f = open(args.input, "r")
         # this section can handles file with one SHA-1 and can be transform to handles file with multiple SHA-1.
         sha1_input = f.readline()
