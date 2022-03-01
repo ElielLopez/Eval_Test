@@ -1,38 +1,58 @@
+import requests
+import argparse
 
-def check_if_valid(sha1_string):
-    size = len(sha1_string)
-    print("the size is: " + str(size))
-
-    if size != 40:
-        print("invalid sha1")
-        return False
-    else:
-        print("The sha1 is: " + sha1_string)
+# this function checks if the API key does not contain 64 characters its not valid.
+def check_key(api_key):
+    if len(api_key) == 64:
+        print("Valid key\n")
         return True
+    else:
+        print("Invalid key!\n")
+        return False
 
-# User need to choose how to upload sha1.
-# The user can type (or paste) directly to the terminal or he can upload text file containing only one sha1.
+
+# this function checks if the file exist inside the directory, if not it will exit the program.
+def check_file(file_name):
+    try:
+        f = open(file_name)
+        print("Searching for file\n")
+        f.close()
+        return True
+    except IOError:
+        print("File does not exist\n")
+        return False
+
+
+def analyze_sha1(key, hash):
+    print(key +"\n"+ hash)
+    parameters = {"apikey": key, "resource": hash}
+    url = requests.get("https://www.virustotal.com/vtapi/v2/file/report", params=parameters)
+    j_resp = url.json()
+    response = int(j_resp.get("response_code"))
+
+    if response == 0:
+        print("Unknown\n")
+    elif response == 1:
+        positives = int(j_resp.get("positives"))
+        if positives >= 50:
+            print("Malicious\n")
+        else:
+            print("Not malicious\n")
 
 if __name__ == '__main__':
+    # api key: 8abe0b4cd868be301d050be4dcfef73f34f41092063118f236f9cd203f9d0e54
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-k", "--api_key", required=True)
+    parser.add_argument("-i", "--input", required=True)
+    args = parser.parse_args()
 
-    print("please choose method for uploading sha1\n1 for uploading text file\n2 for manual typing")
-    method = input()
+    if check_key(args.api_key) and check_file(args.input):
+        print("YAS")
+        f = open(args.input, "r")
+        # this section can handles file with one SHA-1 and can be transform to handles file with multiple SHA-1.
+        sha1_input = f.readline()
 
-    # if the user choose method 1, the user need to insert sha1 directly to the terminal
-    if method == '1':
-        print("you choose " + method)
+        analyze_sha1(args.api_key, sha1_input)
 
-        sha1_input = input("please type sha1\n")
-        # size check; if the sha1 does not contain 40 characters its invalid sha1.
-        if check_if_valid(sha1_input):
-            print("valid")
-
-    # user must create text file named sha1 with only 1 sha1.
-    # once the user type 2 the file will upload automatically
-    if method == '2':
-        print("you choose " + method)
-        print("please upload text file")
-        f = open("sha1.txt", "r")
-        sha1_input = f.read()
-        check_if_valid(sha1_input)
-        print("the sha1 from the text file is: " + sha1_input)
+    else:
+        print("NOOO")
