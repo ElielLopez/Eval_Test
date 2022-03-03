@@ -6,7 +6,9 @@ or Check Point engine\ Microsoft engine detected it as malicious <br/>
 
 requirements:
 1. Install requests
-2. Install Flask <br/>
+2. Install Flask 
+3. iocextract 
+4. in case of missing lib- import the required<br/>
 
 To run the program, you must insert your VT API key and a file name or a path to the file <br/>
 for example:
