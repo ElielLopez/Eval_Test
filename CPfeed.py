@@ -5,6 +5,7 @@ import urllib3
 import requests
 import xml.etree.ElementTree as ET
 import os
+import datetime
 
 from bs4 import BeautifulSoup
 
@@ -77,13 +78,18 @@ if __name__ == '__main__':
     # create file for IOCs if not exist, if does exist, append IOCs tot he end of the file.
     if not path.exists("IOCs.txt"):
         f = open("IOCs.txt", "x")
+        f.write(datetime.datetime.now().ctime())
+        f.write("\n")
     else:
         f = open("IOCs.txt", "a")
+        f.write('\n')
+        f.write(datetime.datetime.now().ctime())
         f.write('\n')
 
     for item in parsed_feed.entries:
         print(item.title)
         print(item.published)
+        # print(item.link)
         for content in item.content:
             # if IOC found in article, write the link into the IOCs file
             if "IOC" in content.value:
@@ -94,8 +100,9 @@ if __name__ == '__main__':
                 # print(item.link)
                 # print(True)
 
-            # elif "Indicator of compromise" in content.value:
-            #     print(item.link)
-            #     print(True)
+            elif "Indicators of Compromise" in content.value:
+                f.write(item.link)
+                f.write('\n')
+                links_list.append(item.link)
     print(links_list)
     print("done")
