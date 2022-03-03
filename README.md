@@ -18,8 +18,7 @@ notice that you must write **_-k_** and **_-i_** <br/>
 #### Engine detection
 ![engine detection](https://user-images.githubusercontent.com/58383829/156322546-1e5070f1-a19d-4132-93c4-32bb9d8f852a.jpg)
 
-_________________
-<br/>
+_________________ <br/>
 ### Check Point Research Feed
 -----------------
 This script will scrap Check Point RSS feed and parse recent publications.<br/> After parsing the data, the script will write the released date, title and author<br/> to a file named **__publication_summary__** and straight to the terminal for more convinience.
