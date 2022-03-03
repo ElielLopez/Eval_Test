@@ -7,6 +7,7 @@ import datetime
 import iocextract
 import bs4
 import csv
+import regex
 from bs4 import BeautifulSoup
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -21,7 +22,6 @@ if __name__ == '__main__':
     url = 'https://research.checkpoint.com/feed/'
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
     response = requests.get(url, headers=headers)  # get
-
     # creating containers for the CSV file data
     links_list = []
     title_list = []
@@ -41,8 +41,8 @@ if __name__ == '__main__':
 
     for item in parsed_feed.entries:
         # printing to terminal the desired data
-        print(item.title)
         print(item.published)
+        print(item.title)
         print(item.author)
 
         # create file for publications if not exist, if does exist
@@ -92,28 +92,29 @@ if __name__ == '__main__':
         temp_title = title_list[i]
         temp_date = date_list[i]
         # using ioc extract lib, extracting all indicators from each link
+        # refang help to transfer ip\url such as 1[.]1[.]1[.]1 to 1.1.1.1 or [.]com to .com
         for ioc in iocextract.extract_iocs(doc.get_text(separator=' '), refang=True, strip=True):
-            # print(ioc.encode('utf-8')) # if want to print straight to terminal
+            print(ioc.encode('utf-8')) # if want to print straight to terminal
             temp_size = len(ioc)
             # for sha256 indicator
             if temp_size == 64 and "http" not in ioc:
-                temp_row = [temp_date,temp_title,'SHA256',ioc]
+                temp_row = [temp_date, temp_title, 'SHA256', ioc]
                 writer.writerow(temp_row)
             # for sha1 indicator
             elif temp_size == 40 and "http" not in ioc:
-                temp_row = [temp_date,temp_title,'SHA1',ioc]
+                temp_row = [temp_date, temp_title, 'SHA1', ioc]
                 writer.writerow(temp_row)
             # for MD5 indicator
             elif temp_size == 32 and "http" not in ioc:
-                temp_row = [temp_date,temp_title,'MD5',ioc]
+                temp_row = [temp_date, temp_title, 'MD5', ioc]
                 writer.writerow(temp_row)
             # for url indicator
             elif "http" in ioc:
-                temp_row = [temp_date,temp_title,'URL',ioc]
+                temp_row = [temp_date, temp_title, 'URL', ioc]
                 writer.writerow(temp_row)
             # for IP indicator
             else:
-                temp_row = [temp_date,temp_title,'IP',ioc]
+                temp_row = [temp_date, temp_title, 'IP', ioc]
                 writer.writerow(temp_row)
 
     print("done")
