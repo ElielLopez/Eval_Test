@@ -26,3 +26,8 @@ in additon, IOC will be extracted into a CSV file <br/>
 Date | Title | IOC_Type | IOC <br/>
 
 _________________
+<br/>
+#### Creating text file with all the links that contains IOCs with time stamp for further reading and investigation
+<br/>
+![ioc txt file with timestamp](https://user-images.githubusercontent.com/58383829/156552742-dba344f2-ba54-446f-90ab-3976af3d1d51.jpg)
+<br/>
