@@ -6,6 +6,7 @@ import requests
 import datetime
 import iocextract
 import bs4
+import csv
 from bs4 import BeautifulSoup
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -59,19 +60,47 @@ if __name__ == '__main__':
     list_size = len(links_list)
     print("the size of the list is: ", list_size)
 
+    csv_headers = ['Date', 'Title', 'IOC_Type', 'IOC']
+    f = open('ioc_csv_file.csv', 'w')
+    writer = csv.writer(f)
+    writer.writerow(csv_headers)
+
     for i in range(0, list_size):
 
         parsed_feed = feedparser.parse(links_list[i])
         urllib3.disable_warnings()
         headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
         response = requests.get(links_list[i], headers=headers)  # get
-        # print(response.status_code)
-        # print(response.text)
 
         doc = bs4.BeautifulSoup(response.content, 'html.parser')
         for ioc in iocextract.extract_iocs(doc.get_text(separator=' '), refang=True, strip=True):
             print(ioc.encode('utf-8'))
+            temp_size = len(ioc)
+            # if sha256
+            if temp_size == 64 and "http" not in ioc:
+                temp_row = [datetime.datetime.now().ctime(),"title",'SHA256',ioc]
+                writer.writerow(temp_row)
+            # if sha1
+            elif temp_size == 40 and "http" not in ioc:
+                temp_row = [datetime.datetime.now().ctime(),"title",'SHA1',ioc]
+                writer.writerow(temp_row)
+            # if MD5
+            elif temp_size == 32 and "http" not in ioc:
+                temp_row = [datetime.datetime.now().ctime(),"title",'MD5',ioc]
+                writer.writerow(temp_row)
+            elif "http" in ioc:
+                temp_row = [datetime.datetime.now().ctime(),"title",'URL',ioc]
+                writer.writerow(temp_row)
+            else:
+                temp_row = [datetime.datetime.now().ctime(),"title",'IP',ioc]
+                writer.writerow(temp_row)
         print("-------------------------------------------\n")
 
-
     print("done")
+
+    # sha256 64 chars
+    # sha1 40 chars
+    #MD5 32 chars
+    # url contains http://
+    # domain contains
+    # ip contains 4 .
