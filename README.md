@@ -21,7 +21,7 @@ notice that you must write **_-k_** and **_-i_** <br/>
 
 ### Check Point Research Feed
 -----------------
-This script will scrap Check Point RSS feed and parse recent publications.<br/> After parsing the data, the script will write the released date, title and author<br/> to a file named **__publication_summary__** and straight to the terminal for more convinience.
+This script will web scrap Check Point RSS feed and parse recent publications.<br/> After parsing the data, the script will write the released date, title and author<br/> to a file named **__publication_summary__** and straight to the terminal for more convinience.
 ![publication summary](https://user-images.githubusercontent.com/58383829/156600531-31485fe7-7ff6-4487-bd92-58d744722838.jpg)
 
 
