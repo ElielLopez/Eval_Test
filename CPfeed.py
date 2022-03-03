@@ -3,10 +3,9 @@ from os import path
 import warnings
 import urllib3
 import requests
-import xml.etree.ElementTree as ET
-import os
 import datetime
-
+import iocextract
+import bs4
 from bs4 import BeautifulSoup
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -22,54 +21,6 @@ if __name__ == '__main__':
     url = 'https://research.checkpoint.com/feed/'
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
     response = requests.get(url, headers=headers)  # get
-    # print(response.status_code)
-    # print(response.text)
-
-    # content = []
-    # # Read the XML file
-    # with open("feed.xml", "r") as file:
-    #     # Read each line in the file, readlines() returns a list of lines
-    #     content = file.readlines()
-    #     # Combine the lines in the list into a string
-    #     content = "".join(content)
-    #     bs_content = BeautifulSoup(content, "lxml")
-    #
-    # result = bs_content.find("strong") #<strong>Top Attacks and Breaches</strong>
-    # #result = bs_content.find_all("strong") # [<strong>Top Attacks </strong>...<strong>Top Attacks </strong>]
-    # print(result)
-    #
-    # # h1_tag = bs_content.find_all("h1")
-    # # result2 = h1_tag.contents
-    # # print(result2)
-
-
-    # getting [] None, None
-    # # Parse XML from a file object
-    # BeautifulSoup(markup, "lxml-xml")
-    # with open("feed.xml") as file:
-    #     soup = BeautifulSoup(file, features="lxml-xml")
-    #
-    # # Parse XML from a Python string
-    # soup = BeautifulSoup("IOCs", features="lxml-xml")
-    # print(soup.prettify())
-    #
-    # print(soup.find_all("<h1>IOCs</h1>", limit=10))
-    # print(soup.find("<h1>IOCs</h1>"))
-    # print(soup.find("IOCs"))
-
-
-
-    # f = open("feed.xml", "x")
-    # f.write(response.text)
-    # with open('feed.xml') as f:
-    #     lines = f.read()
-
-    # print(lines)
-    # mytree = ET.parse('feed.xml')
-    # myroot = mytree.getroot()
-    # print(mytree)
-    # print(myroot)
-
 
 
 # ---------------------------------------------
@@ -87,8 +38,8 @@ if __name__ == '__main__':
         f.write('\n')
 
     for item in parsed_feed.entries:
-        print(item.title)
-        print(item.published)
+        # print(item.title)
+        # print(item.published)
         # print(item.link)
         for content in item.content:
             # if IOC found in article, write the link into the IOCs file
@@ -104,5 +55,23 @@ if __name__ == '__main__':
                 f.write(item.link)
                 f.write('\n')
                 links_list.append(item.link)
-    print(links_list)
+
+    list_size = len(links_list)
+    print("the size of the list is: ", list_size)
+
+    for i in range(0, list_size):
+
+        parsed_feed = feedparser.parse(links_list[i])
+        urllib3.disable_warnings()
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+        response = requests.get(links_list[i], headers=headers)  # get
+        # print(response.status_code)
+        # print(response.text)
+
+        doc = bs4.BeautifulSoup(response.content, 'html.parser')
+        for ioc in iocextract.extract_iocs(doc.get_text(separator=' '), refang=True, strip=True):
+            print(ioc.encode('utf-8'))
+        print("-------------------------------------------\n")
+
+
     print("done")
