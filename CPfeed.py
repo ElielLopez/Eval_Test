@@ -27,6 +27,8 @@ if __name__ == '__main__':
 # ---------------------------------------------
 
     links_list = []
+    title_list = []
+    date_list = []
     # create file for IOCs if not exist, if does exist, append IOCs tot he end of the file.
     if not path.exists("IOCs.txt"):
         f = open("IOCs.txt", "x")
@@ -49,6 +51,8 @@ if __name__ == '__main__':
                 f.write(item.link)
                 f.write('\n')
                 links_list.append(item.link)
+                title_list.append(item.title)
+                date_list.append(item.published)
                 # print(item.link)
                 # print(True)
 
@@ -64,8 +68,7 @@ if __name__ == '__main__':
     f = open('ioc_csv_file.csv', 'w')
     writer = csv.writer(f)
     writer.writerow(csv_headers)
-
-    for i in range(0, list_size):
+    for i in range(0, list_size - 1):
 
         parsed_feed = feedparser.parse(links_list[i])
         urllib3.disable_warnings()
@@ -73,26 +76,31 @@ if __name__ == '__main__':
         response = requests.get(links_list[i], headers=headers)  # get
 
         doc = bs4.BeautifulSoup(response.content, 'html.parser')
+
+        temp_title = title_list[i]
+        temp_date = date_list[i]
         for ioc in iocextract.extract_iocs(doc.get_text(separator=' '), refang=True, strip=True):
-            print(ioc.encode('utf-8'))
+
+            # print(ioc.encode('utf-8'))
+
             temp_size = len(ioc)
             # if sha256
             if temp_size == 64 and "http" not in ioc:
-                temp_row = [datetime.datetime.now().ctime(),"title",'SHA256',ioc]
+                temp_row = [temp_date,temp_title,'SHA256',ioc]
                 writer.writerow(temp_row)
             # if sha1
             elif temp_size == 40 and "http" not in ioc:
-                temp_row = [datetime.datetime.now().ctime(),"title",'SHA1',ioc]
+                temp_row = [temp_date,temp_title,'SHA1',ioc]
                 writer.writerow(temp_row)
             # if MD5
             elif temp_size == 32 and "http" not in ioc:
-                temp_row = [datetime.datetime.now().ctime(),"title",'MD5',ioc]
+                temp_row = [temp_date,temp_title,'MD5',ioc]
                 writer.writerow(temp_row)
             elif "http" in ioc:
-                temp_row = [datetime.datetime.now().ctime(),"title",'URL',ioc]
+                temp_row = [temp_date,temp_title,'URL',ioc]
                 writer.writerow(temp_row)
             else:
-                temp_row = [datetime.datetime.now().ctime(),"title",'IP',ioc]
+                temp_row = [temp_date,temp_title,'IP',ioc]
                 writer.writerow(temp_row)
         print("-------------------------------------------\n")
 
