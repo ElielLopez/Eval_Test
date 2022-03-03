@@ -14,8 +14,13 @@ def check_key(api_key):
 
 # this function checks if the file exist inside the directory, if not it will print error.
 def check_file(file_name):
+
     try:
         f = open(file_name)
+        temp_string = f.readline()
+        if len(temp_string) != 40:
+            print("Invalid SHA1")
+            exit()
         f.close()
         return True
     except IOError:
