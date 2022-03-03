@@ -8,6 +8,8 @@ import requests
 import pandas
 from requests_html import HTML
 from requests_html import HTMLSession
+import os.path
+from os import path
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -57,40 +59,62 @@ if __name__ == '__main__':
     # d_frame.head()
     # print(d_frame)
 
-    NewFeed = feedparser.parse("https://research.checkpoint.com/feed/")
-    # returns how many articles in the feed.
-    num_of_articles = len(NewFeed.entries)
-    print("Number of recent publication: ", num_of_articles)
-    # getting lists of article entries
-    articles = NewFeed.entries
+    # NewFeed = feedparser.parse("https://research.checkpoint.com/feed/")
+    # # returns how many articles in the feed.
+    # num_of_articles = len(NewFeed.entries)
+    # print("Number of recent publication: ", num_of_articles)
+    # # getting lists of article entries
+    # articles = NewFeed.entries
+    #
+    # # dictionary for holding articles details
+    # # articles_details = {"article title": NewFeed.feed.title, "article link": NewFeed.feed.link}
+    # article_list = []
+    #
+    # # print(NewFeed.feed)
+    #
+    # # iterating over individual posts
+    # for article in articles:
+    #     temp = dict()
+    #
+    #     # if any post doesn't have information then throw error.
+    #     try:
+    #         temp["title"] = article.title
+    #         temp["author"] = article.author
+    #         temp["time_published"] = article.published
+    #         temp_summary = article.summary
+    #         # sentences = temp_summary.split('<p> <a href= </a>')
+    #         sentences = re.split("<p>", temp_summary)
+    #         temp["summary"] = sentences
+    #     except:
+    #         pass
+    #
+    #     article_list.append(temp)
+    #
+    # for a in article_list:
+    #     print(a["time_published"], a["title"], a["author"], "\n")
+    url = 'https://research.checkpoint.com/feed/'
+    parsed_feed = feedparser.parse(url)
 
-    # dictionary for holding articles details
-    # articles_details = {"article title": NewFeed.feed.title, "article link": NewFeed.feed.link}
-    article_list = []
+    # create file for IOCs if not exist, if does exist, append IOCs tot he end of the file.
+    if not path.exists("IOCs.txt"):
+        f = open("IOCs.txt", "x")
+    else:
+        f = open("IOCs.txt", "a")
+        f.write('\n')
 
-    # print(NewFeed.feed)
+    for item in parsed_feed.entries:
+        print(item.title)
+        print(item.published)
+        for content in item.content:
+            # if IOC found in article, write the link into the IOCs file
+            if "IOC" in content.value:
+                # f = open("IOCs.txt", "a")
+                f.write(item.link)
+                f.write('\n')
+                print(item.link)
+                print(True)
 
-    # iterating over individual posts
-    for article in articles:
-        temp = dict()
-
-        # if any post doesn't have information then throw error.
-        try:
-            temp["title"] = article.title
-            temp["author"] = article.author
-            temp["time_published"] = article.published
-            temp_summary = article.summary
-            # sentences = temp_summary.split('<p> <a href= </a>')
-            sentences = re.split("<p>", temp_summary)
-            temp["summary"] = sentences
-        except:
-            pass
-
-        article_list.append(temp)
-
-    for a in article_list:
-        print(a["time_published"], a["title"], a["author"], "\n")
-    # storing lists of articles in the dictionary
-    # articles_details["articles"] = article_list
-
-
+            # elif "Indicator of compromise" in content.value:
+            #     print(item.link)
+            #     print(True)
+    print("done")
