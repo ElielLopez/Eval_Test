@@ -1,7 +1,7 @@
 # Evaluation Test
 ## Virus Total Score
 
-This program will recieve hash from a user and checks if more then 50 engines detected it as malicious <br/>
+This program will recieve a file or a file path from the user and checks if more then 50 engines detected it as malicious <br/>
 or Check Point engine\ Microsoft engine detected it as malicious <br/>
 
 requirements:
@@ -21,7 +21,7 @@ notice that you must write **_-k_** and **_-i_** <br/>
 _________________
 ## Check Point Research Feed
 
-This program will receive all recent publication and write the released date, title and author<br/> to a file named **__publication_summary__**
+This script will scrap Check Point RSS feed and parse recent publications.<br/> After parsing the data, the script will write the released date, title and author<br/> to a file named **__publication_summary__** and straight to the terminal for more convinience.
 ![publication summary](https://user-images.githubusercontent.com/58383829/156600531-31485fe7-7ff6-4487-bd92-58d744722838.jpg)
 
 
