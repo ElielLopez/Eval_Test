@@ -25,4 +25,6 @@ This program will receive all the recent publication and print the fate and time
 in additon, IOC will be extracted into a CSV file <br/>
 Date | Title | IOC_Type | IOC <br/>
 
+#### Creating text file with all the links that contains IOCs with time stamp for further reading and investigation
+![ioc txt file with timestamp](https://user-images.githubusercontent.com/58383829/156553173-bc9e23f5-9d08-4142-bb2a-19039b56e07e.jpg)
 _________________
