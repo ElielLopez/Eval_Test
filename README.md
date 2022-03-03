@@ -21,10 +21,17 @@ notice that you must write **_-k_** and **_-i_** <br/>
 _________________
 ## Check Point Research Feed
 
-This program will receive all the recent publication and print the fate and time <br/>
-in additon, IOC will be extracted into a CSV file <br/>
-Date | Title | IOC_Type | IOC <br/>
+This program will receive all recent publication and write the released date, title and author<br/> to a file named **__publication_summary__**
+![publication summary](https://user-images.githubusercontent.com/58383829/156600531-31485fe7-7ff6-4487-bd92-58d744722838.jpg)
 
-#### Creating text file with all the links that contains IOCs with time stamp for further reading and investigation
+
+IOC will be extracted from each article into a CSV file named **__IOC_csv_file__** in the following format: Date | Title | IOC_Type | IOC <br/>
+![csv file](https://user-images.githubusercontent.com/58383829/156600085-95fdd50e-797e-4b3a-ab3a-407338291d0d.jpg)
+
+
+Creating text file named **__IOCs_Link__** with all the links of the articles that contains IOCs with time stamp for further reading and deeper investigation <br/>
 ![ioc txt file with timestamp](https://user-images.githubusercontent.com/58383829/156553173-bc9e23f5-9d08-4142-bb2a-19039b56e07e.jpg)
+
+
+
 _________________
